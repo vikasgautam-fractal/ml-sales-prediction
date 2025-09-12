@@ -1,0 +1,17 @@
+# advance-canary.yaml
+apiVersion: deploy.cloud.google.com/v1
+kind: Automation
+metadata:
+  name: advance-canary
+  location: us-east1   # use your region
+  project: ${PROJECT_ID}
+description: "Auto-advance canary rollouts"
+suspended: false
+serviceAccount: projects/${PROJECT_ID}/serviceAccounts/YOUR_SA@YOUR_PROJECT_ID.iam.gserviceaccount.com
+
+rules:
+- id: auto-advance
+  condition:
+    phase: canary
+    action: advance
+

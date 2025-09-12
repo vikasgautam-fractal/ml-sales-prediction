@@ -1,0 +1,48 @@
+# cloudbuild.yaml
+# Builds your Docker image, pushes to Artifact Registry, and deploys to Cloud Run.
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _REGION: us-east1         # Cloud Run + Artifact Registry region
+  _SERVICE: ml-sales-prediction          # Cloud Run service name
+  _REPO: ml-sales-repo            # Artifact Registry repo name
+  _IMAGE: ml-sales-prediction            # Image name (repo/_IMAGE)
+
+steps:
+  # 1) Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
+      - .
+
+  # 2) Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
+
+  # 3) Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+      - -ceu
+      - |
+        gcloud run deploy ${_SERVICE} \
+          --image ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:latest \
+          --region ${_REGION} \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 8080 \
+          --cpu 1 \
+          --memory 512Mi \
+          --max-instances 10 \
+          --concurrency 80
+
+images:
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
+
+timeout: '1200s'

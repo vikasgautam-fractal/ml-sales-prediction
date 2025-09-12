@@ -1,0 +1,12 @@
+# service.yaml
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: flask-svc
+spec:
+  template:
+    spec:
+      containers:
+        - image: placeholder-image
+          ports:
+            - containerPort: 8080

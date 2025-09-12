@@ -1,0 +1,28 @@
+# clouddeploy.yaml
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: pipeline-vikas
+serialPipeline:
+  stages:
+    - targetId: dev
+      profiles: []
+      strategy:
+        canary:
+          runtimeConfig:
+            cloudRun:
+              automaticTrafficControl: true
+          canaryDeployment:
+            percentages: [25, 75]   # phases = canary-25, canary-75, stable
+            verify: false           # set true if you want automatic Skaffold verify jobs
+
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: dev
+description: "Dev target for Cloud Run"
+run:
+  # replace PROJECT_ID and REGION below (no $ substitution in YAML)
+  location: projects/${PROJECT_ID}/locations/${REGION}
+
