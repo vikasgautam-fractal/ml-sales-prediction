@@ -2,6 +2,7 @@
 # Builds your Docker image, pushes to Artifact Registry, and deploys to Cloud Run.
 
 substitutions:
+  PROJECT_ID: faa-gcp-training-14-kfa-0808 
   _REGION: us-east1         # Cloud Run + Artifact Registry region
   _SERVICE: ml-sales-prediction-vikas          # Cloud Run service name
   _REPO: vikas-repo            # Artifact Registry repo name
