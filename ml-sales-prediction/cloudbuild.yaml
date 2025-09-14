@@ -1,5 +1,7 @@
 # cloudbuild.yaml
 # Builds your Docker image, pushes to Artifact Registry, and deploys to Cloud Run.
+options:
+  logging: CLOUD_LOGGING_ONLY
 
 substitutions:
   PROJECT_ID: faa-gcp-training-14-kfa-0808 
