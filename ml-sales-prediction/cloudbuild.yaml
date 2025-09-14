@@ -3,8 +3,7 @@
 options:
   logging: CLOUD_LOGGING_ONLY
 
-substitutions:
-  PROJECT_ID: faa-gcp-training-14-kfa-0808 
+substitutions: 
   _REGION: us-east1         # Cloud Run + Artifact Registry region
   _SERVICE: ml-sales-prediction-vikas          # Cloud Run service name
   _REPO: vikas-repo            # Artifact Registry repo name
@@ -16,14 +15,14 @@ steps:
     args:
       - build
       - '-t'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
+      - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
       - .
 
   # 2) Push the image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - push
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
+      - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
 
   # 3) Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -32,7 +31,7 @@ steps:
       - -ceu
       - |
         gcloud run deploy ${_SERVICE} \
-          --image ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:latest \
+          --image ${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO}/${_IMAGE}:latest \
           --region ${_REGION} \
           --platform managed \
           --allow-unauthenticated \
@@ -43,7 +42,7 @@ steps:
           --concurrency 80
 
 images:
-  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
+  - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
 
 timeout: '1200s'
 
