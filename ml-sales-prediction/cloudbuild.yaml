@@ -1,13 +1,10 @@
 # cloudbuild.yaml
 # Builds your Docker image, pushes to Artifact Registry, and deploys to Cloud Run.
 
-options:
-  logging: CLOUD_LOGGING_ONLY
-
 substitutions:
   _REGION: us-east1         # Cloud Run + Artifact Registry region
-  _SERVICE: ml-sales-prediction          # Cloud Run service name
-  _REPO: ml-sales-repo            # Artifact Registry repo name
+  _SERVICE: ml-sales-prediction-vikas          # Cloud Run service name
+  _REPO: vikas-repo            # Artifact Registry repo name
   _IMAGE: ml-sales-prediction            # Image name (repo/_IMAGE)
 
 steps:
@@ -46,3 +43,4 @@ images:
   - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
 
 timeout: '1200s'
+
