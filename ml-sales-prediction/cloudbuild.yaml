@@ -16,7 +16,7 @@ steps:
       - build
       - '-t'
       - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO}/${_IMAGE}:latest'
-      - .
+      - './ml-sales-prediction'
 
   # 2) Push the image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
