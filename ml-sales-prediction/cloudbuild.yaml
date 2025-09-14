@@ -37,7 +37,7 @@ steps:
           --port 8080 \
           --cpu 1 \
           --memory 512Mi \
-          --max-instances 10 \
+          --max-instances 2 \
           --concurrency 80
 
 images:
